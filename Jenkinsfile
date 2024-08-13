@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clona el repositorio
-                git branch: 'main', url: 'https://github.com/DiegoAM7/bootcamp'
+                git branch: 'main', url: 'https://github.com/digivoro/g5-mvc'
             }
         }
         stage('Build') {
