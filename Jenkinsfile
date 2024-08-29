@@ -12,6 +12,11 @@ pipeline {
     }
 
     stages {
+	stage ('Mensaje Inicial Slack') {
+		steps {
+			slackSend channel: "#proyecto-sismos-pipeline", color: "good", message: "Inicio de Build"
+		}
+	}
         stage('Checkout') {
             steps {
                 // Clona el repositorio
