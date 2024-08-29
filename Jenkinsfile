@@ -67,10 +67,10 @@ pipeline {
 
 	post {
 		success {
-			slackSend color: "good", message: "Finalización de Build"
+			slackSend  channel: "#proyecto-sismos-pipeline", color: "good", message: "Finalización de Build"
 		}
 		failure {
-			slackSend color: "danger", message: "Error en el Build"
+			slackSend  channel: "#proyecto-sismos-pipeline", color: "danger", message: "Error en el Build"
 		}
 	}
 }
