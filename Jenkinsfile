@@ -14,7 +14,7 @@ pipeline {
     stages {
 	stage ('Mensaje Inicial Slack') {
 		steps {
-			slackSend channel: "#proyecto-sismos-pipeline", color: "#0000ff", message: "Inicio de Build #${env.BUILD_NUMBER}"
+			slackSend channel: "#proyecto-sismos-pipeline", color: "#1919ff", message: ":hammer_and_wrench: Inicio de Build #${env.BUILD_NUMBER}"
 		}
 	}
         stage('Checkout') {
