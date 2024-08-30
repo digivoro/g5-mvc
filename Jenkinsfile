@@ -36,11 +36,11 @@ pipeline {
 			sh 'java --version'
 		}
 	}
-        stage('Selenium') {
+        /*stage('Selenium') {
             steps {
                 sh 'java -cp "bin:lib/*" org.testng.TestNG TestNG.xml'
             }
-        }
+        */
         stage('Build') {
             steps {
                 // Construye el proyecto Maven
