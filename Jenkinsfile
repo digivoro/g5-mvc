@@ -9,7 +9,7 @@ pipeline {
         REGISTRY = "registry.hub.docker.com" // e.g., Docker Hub or any other registry
         SONAR_HOST_URL = 'https://sonarqube.flexsolution.xyz'
         SONARQUBE_TOKEN = credentials('SonarQube')
-	NEXUS_URL = 'https://nexus.flexsolution.xyz/'
+	NEXUS_URL = 'https://nexus.flexsolution.xyz'
         NEXUS_REPO = 'alerta-sismos-repo'
         NEXUS_CREDENTIALS_ID = 'Nexus'
     }
