@@ -66,7 +66,7 @@ pipeline {
                     nexusVersion: 'nexus3',
                     protocol: 'https',
                     nexusUrl: "${NEXUS_URL}",
-                    groupId: 'QA',
+                    groupId: 'cl.devopcitos',
                     version: "${env.BUILD_NUMBER}-${env.BUILD_TIMESTAMP}",
                     repository: "${NEXUS_REPO}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
