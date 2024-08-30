@@ -11,12 +11,21 @@ public class Sismo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String localidad;
     private LocalDateTime fecha;
     private Double profundidad;
     private Double magnitud;
 
     public Sismo() {
+    }
+
+    public Sismo(String localidad, LocalDateTime fecha, Double profundidad, Double magnitud) {
+        this.localidad = localidad;
+        this.fecha = fecha;
+        this.profundidad = profundidad;
+        this.magnitud = magnitud;
     }
 
     public Sismo(Long id, String localidad, LocalDateTime fecha, Double profundidad, Double magnitud) {
@@ -65,5 +74,16 @@ public class Sismo {
 
     public void setMagnitud(Double magnitud) {
         this.magnitud = magnitud;
+    }
+
+    @Override
+    public String toString() {
+        return "Sismo{" +
+                "id=" + id +
+                ", localidad='" + localidad + '\'' +
+                ", fechaSismo=" + fecha +
+                ", profundidad=" + profundidad +
+                ", magnitud=" + magnitud +
+                '}';
     }
 }
