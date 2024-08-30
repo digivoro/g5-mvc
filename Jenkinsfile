@@ -9,9 +9,10 @@ pipeline {
         REGISTRY = "registry.hub.docker.com" // e.g., Docker Hub or any other registry
         SONAR_HOST_URL = 'https://sonarqube.flexsolution.xyz'
         SONARQUBE_TOKEN = credentials('SonarQube')
-	NEXUS_URL = 'https://nexus.flexsolution.xyz'
+	NEXUS_URL = 'nexus.flexsolution.xyz'
         NEXUS_REPO = 'alerta-sismos-repo'
         NEXUS_CREDENTIALS_ID = 'Nexus'
+	BUILD_TIMESTAMP = "${new Date().format('yyyyMMddHHmmss')}"
     }
 
     stages {
@@ -66,7 +67,7 @@ pipeline {
                     protocol: 'https',
                     nexusUrl: "${NEXUS_URL}",
                     groupId: 'QA',
-                    version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                    version: "${env.BUILD_NUMBER}-${env.BUILD_TIMESTAMP}",
                     repository: "${NEXUS_REPO}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
                     artifacts: [
