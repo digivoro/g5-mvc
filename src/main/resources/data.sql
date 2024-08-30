@@ -1,0 +1,1 @@
+INSERT INTO sismo (localidad, fecha, profundidad, magnitud) VALUES ('Panguipulli', '2024-08-30', 112, 3.1);
