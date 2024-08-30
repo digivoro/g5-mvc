@@ -31,6 +31,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/digivoro/g5-mvc'
             }
         }
+	stage('Java Version') {
+		steps {
+			sh 'java --version'
+		}
+	}
         stage('Selenium') {
             steps {
                 sh 'java –cp bin:lib/* org.testng.TestNG TestNG.xml'
