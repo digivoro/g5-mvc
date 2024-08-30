@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Selenium') {
             steps {
-                sh 'java –cp bin;lib/* org.testng.TestNG TestNG.xml'
+                sh 'java –cp bin:lib/* org.testng.TestNG TestNG.xml'
             }
         }
         stage('Build') {
