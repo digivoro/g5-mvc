@@ -27,6 +27,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/digivoro/g5-mvc'
             }
         }
+        stage('Selenium') {
+            steps {
+                sh 'ava –cp bin;lib/* org.testng.TestNG TestNG.xml'
+            }
+        }
         stage('Build') {
             steps {
                 // Construye el proyecto Maven
