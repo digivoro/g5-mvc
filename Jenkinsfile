@@ -78,7 +78,6 @@ pipeline {
                 )
             }
         }
-*/
         stage('Cleanup') {
             steps {
                 // Limpieza despues de cada build
