@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+    	any {
+		customWorkspace '/var/jenkins_home/workspace/alerta-sismos'
+	}
+    }
 
 	tools {
     	maven 'Maven'
