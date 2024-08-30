@@ -70,9 +70,9 @@ pipeline {
                     repository: "${NEXUS_REPO}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
                     artifacts: [
-                        [artifactId: 'alerta-sismos-core',
+                        [artifactId: 'alertasismos',
                          classifier: '',
-                         file: 'target/alerta-sismos-core-0.5.0-SNAPSHOT.jar',
+                         file: 'target/alertasismos-0.0.1-SNAPSHOT.jar',
                          type: 'jar']
                     ]
                 )
