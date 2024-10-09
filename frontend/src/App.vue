@@ -21,6 +21,8 @@ export default {
 <style>
 #app {
   display: flex;
+  margin: 0;
+  padding: 0;
 }
 .content {
   margin-left: 250px; /* Same width as the sidenav */

@@ -1,12 +1,16 @@
 <template>
     <div class="sidenav">
-      <ul>
-        <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/about">About</router-link></li>
-        <li><router-link to="/contact">Contact</router-link></li>
-      </ul>
+        <h1 class="titulo bg-base-200">Alerta Sismos</h1>
+        <ul class="menu menu-lg bg-base-200 w-full h-full p-0 [&_li>*]:rounded-none">
+            <li>
+                <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
+            </li>
+            <li>
+                <router-link to="/suscripciones" class="nav-link" active-class="active">Suscripciones</router-link>
+            </li>
+        </ul>
     </div>
-  </template>
+</template>
   
   <script>
   export default {
@@ -18,10 +22,12 @@
   .sidenav {
     width: 250px;
     height: 100vh;
-    background-color: #333;
-    color: white;
     position: fixed;
-    padding: 20px;
+  }
+  .titulo{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 35px;
   }
   ul {
     list-style-type: none;
