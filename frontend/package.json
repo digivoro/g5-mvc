@@ -22,6 +22,7 @@
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.20",
     "cypress": "^13.12.0",
+    "daisyui": "^4.12.12",
     "jsdom": "^24.1.0",
     "postcss": "^8.4.47",
     "start-server-and-test": "^2.0.4",
