@@ -10,9 +10,9 @@ store.getQuakes();
   <main>
     <h2 class="text-xl">Últimos sismos</h2>
 
-    <div v-if="store.quakes" class="grid grid-cols-3 gap-4">
+    <div v-if="store.recentQuakes" class="grid grid-cols-3 gap-4">
       <QuakeCard
-        v-for="quake in store.quakes"
+        v-for="quake in store.recentQuakes"
         :key="quake.id"
         :quakeData="quake"
       />
