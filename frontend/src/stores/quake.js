@@ -16,7 +16,7 @@ export const useQuakeStore = defineStore("quakeStore", () => {
     try {
       isLoading.value = true;
       const BASE_URL =
-        import.meta.env.VITE_API_URL || "http://localhost:8080/api/sismos";
+        import.meta.env.VITE_API_URL || "http://localhost:8080/api";
       const URL = BASE_URL + "/sismos";
       const res = await fetch(URL);
       const data = await res.json();
