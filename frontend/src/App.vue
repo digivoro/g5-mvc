@@ -1,18 +1,30 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
+<script>
+import Sidenav from './components/Sidenav.vue';
+
+export default {
+  name: "App",
+  components: {
+    Sidenav
+  }
+};
 </script>
 
 <template>
-  <header>
-    <div class="">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div id="app">
+    <Sidenav />
+    <div class="content">
+      <router-view></router-view>
     </div>
-  </header>
-
-  <RouterView />
+  </div>
 </template>
 
-<style scoped></style>
+<style>
+#app {
+  display: flex;
+}
+.content {
+  margin-left: 250px; /* Same width as the sidenav */
+  padding: 20px;
+  flex-grow: 1;
+}
+</style>
