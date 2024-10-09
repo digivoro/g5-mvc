@@ -3,7 +3,7 @@
 <template>
   <main>
     <h1 class="text-3xl font-bold underline">Hello world!</h1>
-    <h2 class="text-xl bg-red-500">
+    <h2 class="text-xl">
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut molestias
       labore quidem eos architecto ipsa error incidunt eveniet iure ipsam.
       Nostrum facilis nihil similique dolorem quos, aspernatur iusto ducimus
@@ -12,5 +12,6 @@
       tempora qui, corrupti reprehenderit minima, magni illum expedita deserunt,
       molestias dignissimos corporis.
     </h2>
+    <button class="btn btn-active btn-primary">Hola</button>
   </main>
 </template>
