@@ -1,41 +1,22 @@
 <script setup>
 import QuakeCard from "@/components/QuakeCard.vue";
+import { useQuakeStore } from "@/stores/quake";
 
-const recentQuakes = [
-  {
-    id: 1,
-    localidad: "Panguipulli",
-    fecha: "2024-08-30T00:00:00",
-    profundidad: 112.0,
-    magnitud: 3.0,
-  },
-  {
-    id: 2,
-    localidad: "Pomaire",
-    fecha: "2024-08-30T00:00:00",
-    profundidad: 112.0,
-    magnitud: 4.0,
-  },
-  {
-    id: 3,
-    localidad: "Pichilemu",
-    fecha: "2024-08-30T00:00:00",
-    profundidad: 112.0,
-    magnitud: 2.7,
-  },
-];
+const store = useQuakeStore();
+store.getQuakes();
 </script>
 
 <template>
   <main>
     <h2 class="text-xl">Últimos sismos</h2>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div v-if="store.quakes" class="grid grid-cols-3 gap-4">
       <QuakeCard
-        v-for="quake in recentQuakes"
+        v-for="quake in store.quakes"
         :key="quake.id"
         :quakeData="quake"
       />
     </div>
+    <div v-else>LOADING</div>
   </main>
 </template>
