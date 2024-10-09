@@ -1,17 +1,41 @@
-<script setup></script>
+<script setup>
+import QuakeCard from "@/components/QuakeCard.vue";
+
+const recentQuakes = [
+  {
+    id: 1,
+    localidad: "Panguipulli",
+    fecha: "2024-08-30T00:00:00",
+    profundidad: 112.0,
+    magnitud: 3.0,
+  },
+  {
+    id: 2,
+    localidad: "Pomaire",
+    fecha: "2024-08-30T00:00:00",
+    profundidad: 112.0,
+    magnitud: 4.0,
+  },
+  {
+    id: 3,
+    localidad: "Pichilemu",
+    fecha: "2024-08-30T00:00:00",
+    profundidad: 112.0,
+    magnitud: 2.7,
+  },
+];
+</script>
 
 <template>
   <main>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
-    <h2 class="text-xl">
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut molestias
-      labore quidem eos architecto ipsa error incidunt eveniet iure ipsam.
-      Nostrum facilis nihil similique dolorem quos, aspernatur iusto ducimus
-      nobis! Saepe, aut expedita ratione possimus veniam quis dicta deleniti
-      ipsam voluptatum nesciunt ipsum iusto aperiam provident eligendi! Nemo
-      tempora qui, corrupti reprehenderit minima, magni illum expedita deserunt,
-      molestias dignissimos corporis.
-    </h2>
-    <button class="btn btn-active btn-primary">Hola</button>
+    <h2 class="text-xl">Últimos sismos</h2>
+
+    <div class="grid grid-cols-3 gap-4">
+      <QuakeCard
+        v-for="quake in recentQuakes"
+        :key="quake.id"
+        :quakeData="quake"
+      />
+    </div>
   </main>
 </template>
