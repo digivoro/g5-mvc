@@ -2,12 +2,10 @@ package cl.devopcitos.alertasismos.models;
 
 import static org.testng.Assert.assertEquals;
 
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -19,7 +17,7 @@ public class SismoTest {
     public void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         //driver = RemoteWebDriver(new URL("https://selenium.flexsolution.xyz"));
     }
 
@@ -39,8 +37,8 @@ public class SismoTest {
         // Envía la búsqueda
         driver.findElement(By.name("q")).submit();
 
-        // Espera hasta que el título de la página cambie para reflejar los resultados de búsqueda
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        // Espera hasta que el título de la página cambie para reflejar los resultados de búsqueda 
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
         assertEquals(driver.getTitle().contains("Selenium WebDriver"), true, "El título de la página no contiene 'Selenium WebDriver'");
 
         // Verifica que "Selenium WebDriver" aparezca en los resultados
