@@ -1,5 +1,6 @@
 <script setup>
 import QuakeCard from "@/components/QuakeCard.vue";
+import SubscriptionFrom from "@/components/SubscriptionFrom.vue";
 import { useQuakeStore } from "@/stores/quake";
 
 const store = useQuakeStore();
@@ -18,5 +19,10 @@ store.getQuakes();
       />
     </div>
     <div v-else>LOADING</div>
+
+    <section class="mt-8">
+      <h2 class="text-xl">Nueva suscripción</h2>
+      <SubscriptionFrom />
+    </section>
   </main>
 </template>
