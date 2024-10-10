@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useSubscriptionStore = defineStore("subscriptionStore", () => {
   const subscriptions = ref([]);
@@ -13,6 +14,8 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
       const res = await fetch(URL);
       const data = await res.json();
       subscriptions.value = [...data];
+
+      console.log(subscriptions.value);
     } catch (error) {
       console.error(error);
     } finally {

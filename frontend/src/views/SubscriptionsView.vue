@@ -1,34 +1,8 @@
 <script setup>
-const subscriptions = [
-  {
-    id: 1,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-  {
-    id: 2,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-  {
-    id: 3,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-  {
-    id: 4,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-];
+import { useSubscriptionStore } from "@/stores/subscription";
+
+const store = useSubscriptionStore();
+store.getSubscriptions();
 </script>
 
 <template>
@@ -48,29 +22,39 @@ const subscriptions = [
           </tr>
         </thead>
         <tbody>
-          <tr v-for="subscription in subscriptions" :key="subscription.id">
-            <th>{{ subscription.id }}</th>
-            <td>{{ subscription.email }}</td>
-            <td>{{ subscription.nombre }}</td>
-            <td>{{ subscription.localidad }}</td>
-            <td>
-              <div class="flex gap-2">
-                <div class="tooltip" data-tip="Editar">
-                  <button class="btn btn-square btn-xs btn-primary">✏️</button>
+          <template v-if="store.isLoading">
+            <p>CARGANDO...</p>
+          </template>
+          <template v-else-if="store.subscriptions">
+            <tr
+              v-for="subscription in store.subscriptions"
+              :key="subscription.id"
+            >
+              <th>{{ subscription.id }}</th>
+              <td>{{ subscription.email }}</td>
+              <td>{{ subscription.nombre }}</td>
+              <td>{{ subscription.localidad }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <div class="tooltip" data-tip="Editar">
+                    <button class="btn btn-square btn-xs btn-primary">
+                      ✏️
+                    </button>
+                  </div>
+                  <div class="tooltip" data-tip="Eliminar">
+                    <button class="btn btn-square btn-xs btn-error">🗑️</button>
+                  </div>
                 </div>
-                <div class="tooltip" data-tip="Eliminar">
-                  <button class="btn btn-square btn-xs btn-error">🗑️</button>
-                </div>
-              </div>
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                class="toggle toggle-success"
-                checked="checked"
-              />
-            </td>
-          </tr>
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-success"
+                  :checked="subscription.activo === true"
+                />
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
