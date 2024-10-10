@@ -7,7 +7,7 @@ store.getSubscriptions();
 
 <template>
   <div>
-    <h1 class="text-xl">Suscripciones</h1>
+    <h1 class="text-2xl font-bold mb-4">Suscripciones</h1>
 
     <div class="overflow-x-auto">
       <table class="table table-zebra">
@@ -17,13 +17,16 @@ store.getSubscriptions();
             <th>Email</th>
             <th>Nombre</th>
             <th>Localidad</th>
-            <th>Acciones</th>
             <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <template v-if="store.isLoading">
-            <p>CARGANDO...</p>
+            <tr>
+              <th></th>
+              <td>CARGANDO DATOS...</td>
+            </tr>
           </template>
           <template v-else-if="store.subscriptions">
             <tr
@@ -35,6 +38,14 @@ store.getSubscriptions();
               <td>{{ subscription.nombre }}</td>
               <td>{{ subscription.localidad }}</td>
               <td>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-success bg-success hover:cursor-default"
+                  :checked="subscription.activo === true"
+                  @click.prevent=""
+                />
+              </td>
+              <td>
                 <div class="flex gap-2">
                   <div class="tooltip" data-tip="Editar">
                     <button class="btn btn-square btn-xs btn-primary">
@@ -45,13 +56,6 @@ store.getSubscriptions();
                     <button class="btn btn-square btn-xs btn-error">🗑️</button>
                   </div>
                 </div>
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  class="toggle toggle-success"
-                  :checked="subscription.activo === true"
-                />
               </td>
             </tr>
           </template>

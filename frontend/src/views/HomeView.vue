@@ -9,7 +9,7 @@ store.getQuakes();
 
 <template>
   <main>
-    <h2 class="text-xl">Últimos sismos</h2>
+    <h2 class="text-2xl font-bold mb-4">Últimos sismos</h2>
 
     <div v-if="store.recentQuakes" class="grid grid-cols-3 gap-4">
       <QuakeCard
@@ -21,7 +21,7 @@ store.getQuakes();
     <div v-else>LOADING</div>
 
     <section class="mt-8">
-      <h2 class="text-xl">Nueva suscripción</h2>
+      <h2 class="text-2xl font-bold mb-4">Nueva suscripción</h2>
       <SubscriptionFrom />
     </section>
   </main>
