@@ -5,13 +5,21 @@ defineProps({
 </script>
 
 <template>
-  <div class="card bg-primary-100 shadow-xl">
+  <div class="card badge-primary text-primary-content shadow-xl">
     <div class="card-body">
       <h2 class="card-title">Sismo {{ quakeData.id }}</h2>
-      <p>🗺️ {{ quakeData.localidad }}</p>
-      <p>📈 {{ quakeData.magnitud }}</p>
-      <p>📅 {{ quakeData.fecha }}</p>
-      <p>⏬ {{ quakeData.profundidad }} [m]</p>
+      <div class="tooltip text-left" data-tip="Localidad">
+        <p>🗺️ {{ quakeData.localidad }}</p>
+      </div>
+      <div class="tooltip text-left" data-tip="Magnitud">
+        <p>📈 {{ quakeData.magnitud }}</p>
+      </div>
+      <div class="tooltip text-left" data-tip="Fecha">
+        <p>📅 {{ quakeData.fecha }}</p>
+      </div>
+      <div class="tooltip text-left" data-tip="Profundidad">
+        <p>⏬ {{ quakeData.profundidad }} [m]</p>
+      </div>
     </div>
   </div>
 </template>

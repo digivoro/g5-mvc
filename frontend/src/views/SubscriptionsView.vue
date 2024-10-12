@@ -1,4 +1,5 @@
 <script setup>
+import PageHeader from "@/components/PageHeader.vue";
 import { useSubscriptionStore } from "@/stores/subscription";
 
 const store = useSubscriptionStore();
@@ -7,7 +8,7 @@ store.getSubscriptions();
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold mb-4">Suscripciones</h1>
+    <PageHeader>Suscripciones</PageHeader>
 
     <div class="overflow-x-auto">
       <table class="table table-zebra">

@@ -1,20 +1,23 @@
 <script>
-import Sidenav from './components/Sidenav.vue';
+import Sidenav from "./components/Sidenav.vue";
 
 export default {
   name: "App",
   components: {
-    Sidenav
-  }
+    Sidenav,
+  },
 };
 </script>
 
 <template>
   <div id="app">
-    <Sidenav />
-    <div class="content">
-      <router-view></router-view>
-    </div>
+    <Sidenav>
+      <template #content>
+        <div class="px-8 py-6">
+          <router-view />
+        </div>
+      </template>
+    </Sidenav>
   </div>
 </template>
 
@@ -23,10 +26,5 @@ export default {
   display: flex;
   margin: 0;
   padding: 0;
-}
-.content {
-  margin-left: 250px; /* Same width as the sidenav */
-  padding: 20px;
-  flex-grow: 1;
 }
 </style>
