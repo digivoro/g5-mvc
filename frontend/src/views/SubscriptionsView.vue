@@ -1,9 +1,27 @@
 <script setup>
 import PageHeader from "@/components/PageHeader.vue";
+import SubscriptionUpdateDialog from "@/components/SubscriptionUpdateDialog.vue";
 import { useSubscriptionStore } from "@/stores/subscription";
+import { ref } from "vue";
 
 const store = useSubscriptionStore();
 store.getSubscriptions();
+
+// Modal
+const isModalOpen = ref(false);
+const currentSubscriptionId = ref(null);
+function openEditModal(id) {
+  currentSubscriptionId.value = id;
+  isModalOpen.value = true;
+}
+function closeEditModal() {
+  isModalOpen.value = false;
+  currentSubscriptionId.value = null;
+}
+function handleUpdate(updatedSubscription) {
+  store.updateSubscription(currentSubscriptionId.value, updatedSubscription);
+  store.getSubscriptions();
+}
 </script>
 
 <template>
@@ -49,7 +67,10 @@ store.getSubscriptions();
               <td>
                 <div class="flex gap-2">
                   <div class="tooltip" data-tip="Editar">
-                    <button class="btn btn-square btn-xs btn-primary">
+                    <button
+                      class="btn btn-square btn-xs btn-primary"
+                      @click="openEditModal(subscription.id)"
+                    >
                       ✏️
                     </button>
                   </div>
@@ -62,6 +83,12 @@ store.getSubscriptions();
           </template>
         </tbody>
       </table>
+
+      <SubscriptionUpdateDialog
+        :is-open="isModalOpen"
+        :subscription-id="currentSubscriptionId"
+        @close="closeEditModal"
+      />
     </div>
   </div>
 </template>
