@@ -1,6 +1,5 @@
 package cl.devopcitos.alertasismos.controllers;
 
-
 import cl.devopcitos.alertasismos.models.Sismo;
 import cl.devopcitos.alertasismos.services.SismoService;
 import org.springframework.beans.factory.annotation.Autowired;
