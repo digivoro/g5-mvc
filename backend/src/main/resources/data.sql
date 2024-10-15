@@ -3,3 +3,5 @@ INSERT INTO sismo (localidad, fecha, profundidad, magnitud) VALUES ('Pomaire', '
 INSERT INTO sismo (localidad, fecha, profundidad, magnitud) VALUES ('Pichilemu', '2024-10-04', 20, 6.6);
 INSERT INTO sismo (localidad, fecha, profundidad, magnitud) VALUES ('Valdivia', '2024-08-25', 100, 9.1);
 INSERT INTO suscripcion (email, localidad, nombre) VALUES ('frichterc+g5@gmail.com', 'Pomaire', 'Felipe');
+INSERT INTO suscripcion (email, localidad, nombre) VALUES ('frichterc+g5@gmail.com', 'Valdivia', 'Felipe');
+INSERT INTO suscripcion (email, localidad, nombre, activo) VALUES ('frichterc+g5@gmail.com', 'Panguipulli', 'El Inactivo', false);
