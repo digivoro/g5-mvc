@@ -74,13 +74,13 @@ public class Suscripcion {
 
   @Override
   public String toString() {
-    return "Sismo{" +
-                "id=" + id +
-                ", localidad='" + localidad + '\'' +
-                ", email=" + email +
-                ", nombre=" + nombre +
-                ", estado=" + activo +
-                '}';
+    return "Suscripcion{" +
+      "id=" + id +
+      ", localidad='" + localidad + '\'' +
+      ", email=" + email +
+      ", nombre=" + nombre +
+      ", activo=" + activo +
+      '}';
   }
 
 }
