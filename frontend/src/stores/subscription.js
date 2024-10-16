@@ -40,8 +40,6 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
   }
 
   async function updateSubscription(id, subscriptionData) {
-    console.log("updating");
-    console.log(subscriptionData);
     try {
       isLoading.value = true;
       const res = await fetch(`${URL}/${id}`, {
@@ -56,10 +54,39 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
       if (!data.id) {
         throw new Error("ocurrió un error al actualizar la suscripción");
       }
-      console.log("updated");
-      return true;
+      return {
+        ok: true,
+      };
     } catch (error) {
       console.error(error);
+      return {
+        ok: false,
+        message: error.message,
+      };
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function deleteSubscription(id) {
+    try {
+      isLoading.value = true;
+      const res = await fetch(`${URL}/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!data) {
+        throw new Error("ocurrió un error al eliminar la suscripción");
+      }
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        ok: false,
+        message: error.message,
+      };
     } finally {
       isLoading.value = false;
     }
@@ -72,5 +99,6 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
     getSubscription,
     getSubscriptions,
     updateSubscription,
+    deleteSubscription,
   };
 });

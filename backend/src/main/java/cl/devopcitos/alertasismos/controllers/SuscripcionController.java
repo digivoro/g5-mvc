@@ -42,7 +42,7 @@ public class SuscripcionController {
   }
 
   @DeleteMapping("/{id}")
-  public boolean deleteSuscripcion(@PathVariable Long id){
+  public Boolean deleteSuscripcion(@PathVariable Long id){
     suscripcionService.deleteSuscripcion(id);
     return true;
   }

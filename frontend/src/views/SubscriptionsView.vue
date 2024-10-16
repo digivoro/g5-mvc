@@ -7,8 +7,19 @@ import { ref } from "vue";
 const store = useSubscriptionStore();
 store.getSubscriptions();
 
-async function handleRemove(subscriptionId) {
-  // Remove
+const isLoading = ref(false);
+
+async function handleDelete(subscriptionId) {
+  isLoading.value = true;
+  const deleteResult = await store.deleteSubscription(subscriptionId);
+  if (!deleteResult.ok) {
+    alert(deleteResult.message);
+  }
+  const getResult = await store.getSubscriptions();
+  if (!getResult.ok) {
+    alert(getResult.message);
+  }
+  isLoading.value = false;
 }
 
 // Update modal
@@ -24,18 +35,19 @@ function closeEditModal() {
   currentSubscriptionId.value = null;
 }
 async function handleUpdate(updatedSubscription) {
-  try {
-    isSubscriptionUpdating.value = true;
-    await store.updateSubscription(
-      currentSubscriptionId.value,
-      updatedSubscription
-    );
-    await store.getSubscriptions();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    isSubscriptionUpdating.value = false;
+  isSubscriptionUpdating.value = true;
+  const updateResult = await store.updateSubscription(
+    currentSubscriptionId.value,
+    updatedSubscription
+  );
+  if (!updateResult.ok) {
+    alert(updateResult.message);
   }
+  const getResult = await store.getSubscriptions();
+  if (!getResult.ok) {
+    alert(getResult.message);
+  }
+  isSubscriptionUpdating.value = false;
 }
 </script>
 
@@ -90,7 +102,12 @@ async function handleUpdate(updatedSubscription) {
                     </button>
                   </div>
                   <div class="tooltip" data-tip="Eliminar">
-                    <button class="btn btn-square btn-xs btn-error">🗑️</button>
+                    <button
+                      class="btn btn-square btn-xs btn-error"
+                      @click="handleDelete(subscription.id)"
+                    >
+                      🗑️
+                    </button>
                   </div>
                 </div>
               </td>
