@@ -9,6 +9,34 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
   const currentSubscription = ref({});
   const isLoading = ref(false);
 
+  async function createSubscription(subscriptionData) {
+    try {
+      isLoading.value = true;
+      const res = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscriptionData),
+      });
+      const data = await res.json();
+      if (!data) {
+        throw new Error("ocurrió un error al crear la suscripción");
+      }
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        ok: false,
+        message: error.message,
+      };
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   async function getSubscriptions() {
     try {
       isLoading.value = true;
@@ -96,6 +124,7 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
     subscriptions,
     currentSubscription,
     isLoading,
+    createSubscription,
     getSubscription,
     getSubscriptions,
     updateSubscription,

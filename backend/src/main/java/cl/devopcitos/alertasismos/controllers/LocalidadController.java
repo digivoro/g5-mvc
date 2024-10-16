@@ -17,7 +17,7 @@ public class LocalidadController {
     @Autowired
     private LocalidadRepository localidadRepository;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<Localidad> getAllLocalidades() {
         return localidadRepository.findAll();
     }

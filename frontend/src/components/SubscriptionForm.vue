@@ -1,22 +1,28 @@
 <script setup>
+import { useLocalityStore } from "@/stores/locality";
+import { useSubscriptionStore } from "@/stores/subscription";
 import { ref } from "vue";
+
+const subscriptionStore = useSubscriptionStore();
+const localityStore = useLocalityStore();
 
 const name = ref("");
 const email = ref("");
 const locality = ref("");
 
-const submitForm = () => {
-  console.log("Nombre:", name.value);
-  console.log("Email:", email.value);
-  console.log("Localidad:", locality.value);
-  // Puedes manejar el envío del formulario aquí
-};
+async function onSubmit() {
+  await subscriptionStore.createSubscription({
+    nombre: name.value,
+    email: email.value,
+    localidad: locality.value,
+  });
+}
 </script>
 
 <template>
   <div class="card bg-secondary text-secondary-content shadow-xl">
     <div class="card-body">
-      <form @submit.prevent="submitForm" class="space-y-4">
+      <form @submit.prevent="onSubmit" class="space-y-4">
         <div>
           <label for="name" class="block mb-2">Nombre:</label>
           <input
@@ -45,8 +51,14 @@ const submitForm = () => {
             class="select select-bordered select-secondary w-full text-white"
           >
             <option disabled selected>- Seleccione localidad -</option>
-            <option>Han Solo</option>
-            <option>Greedo</option>
+
+            <option
+              v-for="locality in localityStore.localities"
+              :key="locality.id"
+              class="text-white"
+            >
+              {{ locality.nombre }}
+            </option>
           </select>
         </div>
         <button type="submit" class="btn btn-primary">

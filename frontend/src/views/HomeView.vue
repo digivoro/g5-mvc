@@ -2,19 +2,23 @@
 import PageHeader from "@/components/PageHeader.vue";
 import QuakeCard from "@/components/QuakeCard.vue";
 import SubscriptionFrom from "@/components/SubscriptionForm.vue";
+import { useLocalityStore } from "@/stores/locality";
 import { useQuakeStore } from "@/stores/quake";
 
-const store = useQuakeStore();
-store.getQuakes();
+const quakeStore = useQuakeStore();
+const localityStore = useLocalityStore();
+
+quakeStore.getQuakes();
+localityStore.getLocalities();
 </script>
 
 <template>
   <main>
     <PageHeader>Últimos sismos</PageHeader>
 
-    <div v-if="store.recentQuakes" class="grid grid-cols-3 gap-4">
+    <div v-if="quakeStore.recentQuakes" class="grid grid-cols-3 gap-4">
       <QuakeCard
-        v-for="quake in store.recentQuakes"
+        v-for="quake in quakeStore.recentQuakes"
         :key="quake.id"
         :quakeData="quake"
       />
