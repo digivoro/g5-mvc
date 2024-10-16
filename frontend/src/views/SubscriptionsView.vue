@@ -1,39 +1,47 @@
 <script setup>
-const subscriptions = [
-  {
-    id: 1,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-  {
-    id: 2,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-  {
-    id: 3,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-  {
-    id: 4,
-    email: "felipe@richter.cl",
-    nombre: "Felipe Richter",
-    localidad: "Pomaire",
-    activa: false,
-  },
-];
+import PageHeader from "@/components/PageHeader.vue";
+import SubscriptionUpdateDialog from "@/components/SubscriptionUpdateDialog.vue";
+import { useSubscriptionStore } from "@/stores/subscription";
+import { ref } from "vue";
+
+const store = useSubscriptionStore();
+store.getSubscriptions();
+
+async function handleRemove(subscriptionId) {
+  // Remove
+}
+
+// Update modal
+const isModalOpen = ref(false);
+const isSubscriptionUpdating = ref(false);
+const currentSubscriptionId = ref(null);
+function openEditModal(id) {
+  currentSubscriptionId.value = id;
+  isModalOpen.value = true;
+}
+function closeEditModal() {
+  isModalOpen.value = false;
+  currentSubscriptionId.value = null;
+}
+async function handleUpdate(updatedSubscription) {
+  try {
+    isSubscriptionUpdating.value = true;
+    await store.updateSubscription(
+      currentSubscriptionId.value,
+      updatedSubscription
+    );
+    await store.getSubscriptions();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isSubscriptionUpdating.value = false;
+  }
+}
 </script>
 
 <template>
   <div>
-    <h1 class="text-xl">Suscripciones</h1>
+    <PageHeader>Suscripciones</PageHeader>
 
     <div class="overflow-x-auto">
       <table class="table table-zebra">
@@ -43,36 +51,61 @@ const subscriptions = [
             <th>Email</th>
             <th>Nombre</th>
             <th>Localidad</th>
-            <th>Acciones</th>
             <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="subscription in subscriptions" :key="subscription.id">
-            <th>{{ subscription.id }}</th>
-            <td>{{ subscription.email }}</td>
-            <td>{{ subscription.nombre }}</td>
-            <td>{{ subscription.localidad }}</td>
-            <td>
-              <div class="flex gap-2">
-                <div class="tooltip" data-tip="Editar">
-                  <button class="btn btn-square btn-xs btn-primary">✏️</button>
+          <template v-if="store.isLoading">
+            <tr>
+              <th></th>
+              <td>CARGANDO DATOS...</td>
+            </tr>
+          </template>
+          <template v-else-if="store.subscriptions">
+            <tr
+              v-for="subscription in store.subscriptions"
+              :key="subscription.id"
+            >
+              <th>{{ subscription.id }}</th>
+              <td>{{ subscription.email }}</td>
+              <td>{{ subscription.nombre }}</td>
+              <td>{{ subscription.localidad }}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-success bg-success hover:cursor-default"
+                  :checked="subscription.activo === true"
+                  @click.prevent=""
+                />
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <div class="tooltip" data-tip="Editar">
+                    <button
+                      class="btn btn-square btn-xs btn-primary"
+                      @click="openEditModal(subscription.id)"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                  <div class="tooltip" data-tip="Eliminar">
+                    <button class="btn btn-square btn-xs btn-error">🗑️</button>
+                  </div>
                 </div>
-                <div class="tooltip" data-tip="Eliminar">
-                  <button class="btn btn-square btn-xs btn-error">🗑️</button>
-                </div>
-              </div>
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                class="toggle toggle-success"
-                checked="checked"
-              />
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
+
+      <SubscriptionUpdateDialog
+        :is-open="isModalOpen"
+        :is-updating="isSubscriptionUpdating"
+        :subscription-id="currentSubscriptionId"
+        @close="closeEditModal"
+        @update="handleUpdate"
+      />
     </div>
   </div>
 </template>

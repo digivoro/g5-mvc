@@ -1,44 +1,38 @@
+<script setup>
+import TheLogo from "./TheLogo.vue";
+</script>
+
 <template>
-    <div class="sidenav">
-        <h1 class="titulo bg-base-200">Alerta Sismos</h1>
-        <ul class="menu menu-lg bg-base-200 w-full h-full p-0 [&_li>*]:rounded-none">
-            <li>
-                <router-link to="/" class="nav-link" active-class="active">Inicio</router-link>
-            </li>
-            <li>
-                <router-link to="/suscripciones" class="nav-link" active-class="active">Suscripciones</router-link>
-            </li>
-        </ul>
+  <div class="drawer md:drawer-open">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content">
+      <!-- Page content here -->
+      <slot name="content" />
     </div>
+    <div class="drawer-side">
+      <label
+        for="my-drawer-2"
+        aria-label="close sidebar"
+        class="drawer-overlay"
+      ></label>
+
+      <ul class="menu min-h-full w-72 p-6">
+        <div class="w-full">
+          <TheLogo />
+        </div>
+        <div class="divider"></div>
+        <!-- Sidebar content here -->
+        <li>
+          <router-link to="/" class="" active-class="active">
+            Inicio
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/suscripciones" class="" active-class="active">
+            Suscripciones
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
-  
-  <script>
-  export default {
-    name: "Sidenav"
-  };
-  </script>
-  
-  <style scoped>
-  .sidenav {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-  }
-  .titulo{
-    text-align: center;
-    padding-top: 20px;
-    font-size: 35px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    margin: 15px 0;
-  }
-  a {
-    color: white;
-    text-decoration: none;
-  }
-  </style>
-  

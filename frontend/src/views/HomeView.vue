@@ -1,6 +1,7 @@
 <script setup>
+import PageHeader from "@/components/PageHeader.vue";
 import QuakeCard from "@/components/QuakeCard.vue";
-import SubscriptionFrom from "@/components/SubscriptionFrom.vue";
+import SubscriptionFrom from "@/components/SubscriptionForm.vue";
 import { useQuakeStore } from "@/stores/quake";
 
 const store = useQuakeStore();
@@ -9,7 +10,7 @@ store.getQuakes();
 
 <template>
   <main>
-    <h2 class="text-xl">Últimos sismos</h2>
+    <PageHeader>Últimos sismos</PageHeader>
 
     <div v-if="store.recentQuakes" class="grid grid-cols-3 gap-4">
       <QuakeCard
@@ -21,7 +22,7 @@ store.getQuakes();
     <div v-else>LOADING</div>
 
     <section class="mt-8">
-      <h2 class="text-xl">Nueva suscripción</h2>
+      <PageHeader>Nueva suscripción</PageHeader>
       <SubscriptionFrom />
     </section>
   </main>

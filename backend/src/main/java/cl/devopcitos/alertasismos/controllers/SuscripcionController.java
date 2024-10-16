@@ -36,6 +36,11 @@ public class SuscripcionController {
     return suscripcionService.createSuscripcion(updatedSuscripcion);
   }
 
+  @PatchMapping("/{id}")
+  public Suscripcion updateSuscripcionParcial(@PathVariable Long id, @RequestBody Suscripcion suscripcionParcial) {
+    return suscripcionService.updateSuscripcionParcial(id, suscripcionParcial);
+  }
+
   @DeleteMapping("/{id}")
   public boolean deleteSuscripcion(@PathVariable Long id){
     suscripcionService.deleteSuscripcion(id);
