@@ -61,8 +61,8 @@ public class LocalidadController {
     private String extraerLocalidad(String refGeografica) {
         // Verificar si contiene la cadena " de "
         if (refGeografica != null && refGeografica.contains(" de ")) {
-            // Extraer todo lo que está después de " de "
-            return refGeografica.substring(refGeografica.lastIndexOf(" de ") + 4).trim();
+            // Extraer todo lo que está después de la PRIMERA aparición de " de "
+            return refGeografica.substring(refGeografica.indexOf(" de ") + 4).trim();
         }
         // Si no contiene " de ", devolver la cadena completa
         return refGeografica;

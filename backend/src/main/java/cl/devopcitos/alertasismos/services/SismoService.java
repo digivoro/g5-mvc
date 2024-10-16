@@ -51,4 +51,9 @@ public class SismoService {
         return false;
     }
 
+    // **Nuevo método** para guardar una lista de sismos
+    public List<Sismo> saveAll(List<Sismo> sismos) {
+        return sismoRepository.saveAll(sismos);
+    }
+
 }
