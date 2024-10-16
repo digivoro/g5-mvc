@@ -39,18 +39,24 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
     }
   }
 
-  async function updateSubscription(id, data) {
+  async function updateSubscription(id, subscriptionData) {
+    console.log("updating");
+    console.log(subscriptionData);
     try {
       isLoading.value = true;
       const res = await fetch(`${URL}/${id}`, {
-        method: "PUT",
-        body: data,
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscriptionData),
       });
       const data = await res.json();
 
       if (!data.id) {
         throw new Error("ocurrió un error al actualizar la suscripción");
       }
+      console.log("updated");
       return true;
     } catch (error) {
       console.error(error);

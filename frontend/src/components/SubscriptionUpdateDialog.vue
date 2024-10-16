@@ -7,6 +7,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  isLoading: {
+    type: Boolean,
+    required: true,
+  },
   subscriptionId: {
     type: null,
     required: true,
@@ -22,7 +26,7 @@ const form = ref({
   email: "",
   nombre: "",
   localidad: "",
-  active: null,
+  activo: null,
 });
 
 const subscription = ref(null);
@@ -43,14 +47,12 @@ function closeModal() {
   emit("close");
   clearForm();
 }
-
-async function onSubmit() {
-  isLoading.value = true;
-  store.updateSubscription(props.subscriptionId, form.value);
-}
-
 function clearForm() {
   form.value = { email: "", nombre: "", localidad: "", activo: null };
+}
+async function onSubmit() {
+  emit("update", form.value);
+  emit("close");
 }
 </script>
 
@@ -104,6 +106,7 @@ function clearForm() {
         <label class="input input-bordered flex items-center gap-2">
           <span class="w-24">Activo</span>
           <input
+            v-model="form.activo"
             type="checkbox"
             class="toggle toggle-success bg-success hover:cursor-default"
             :checked="subscriptionStore.currentSubscription.activo"
@@ -111,17 +114,20 @@ function clearForm() {
         </label>
 
         <button type="submit" class="btn btn-primary">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-          >
-            <path
-              d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"
-            />
-          </svg>
-          Actualizar suscripción
+          <template v-if="isLoading"> Actualizando... </template>
+          <template v-else>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
+              <path
+                d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"
+              />
+            </svg>
+            Actualizar suscripción
+          </template>
         </button>
       </form>
     </div>

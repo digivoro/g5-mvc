@@ -7,8 +7,13 @@ import { ref } from "vue";
 const store = useSubscriptionStore();
 store.getSubscriptions();
 
-// Modal
+async function handleRemove(subscriptionId) {
+  // Remove
+}
+
+// Update modal
 const isModalOpen = ref(false);
+const isSubscriptionUpdating = ref(false);
 const currentSubscriptionId = ref(null);
 function openEditModal(id) {
   currentSubscriptionId.value = id;
@@ -18,9 +23,19 @@ function closeEditModal() {
   isModalOpen.value = false;
   currentSubscriptionId.value = null;
 }
-function handleUpdate(updatedSubscription) {
-  store.updateSubscription(currentSubscriptionId.value, updatedSubscription);
-  store.getSubscriptions();
+async function handleUpdate(updatedSubscription) {
+  try {
+    isSubscriptionUpdating.value = true;
+    await store.updateSubscription(
+      currentSubscriptionId.value,
+      updatedSubscription
+    );
+    await store.getSubscriptions();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isSubscriptionUpdating.value = false;
+  }
 }
 </script>
 
@@ -86,8 +101,10 @@ function handleUpdate(updatedSubscription) {
 
       <SubscriptionUpdateDialog
         :is-open="isModalOpen"
+        :is-updating="isSubscriptionUpdating"
         :subscription-id="currentSubscriptionId"
         @close="closeEditModal"
+        @update="handleUpdate"
       />
     </div>
   </div>
