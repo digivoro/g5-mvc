@@ -3,12 +3,9 @@ package cl.devopcitos.alertasismos.services;
 import cl.devopcitos.alertasismos.models.Suscripcion;
 import cl.devopcitos.alertasismos.repositories.SuscripcionRepository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
