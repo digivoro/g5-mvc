@@ -15,3 +15,8 @@ localidad varchar(255) NOT NULL,
 nombre varchar(255) NOT NULL,
 activo BOOLEAN DEFAULT 1
 );
+
+CREATE TABLE localidad (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nombre varchar(255) NOT NULL
+)

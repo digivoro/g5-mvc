@@ -5,3 +5,13 @@ INSERT INTO sismo (localidad, fecha, profundidad, magnitud) VALUES ('Valdivia', 
 INSERT INTO suscripcion (email, localidad, nombre) VALUES ('frichterc+g5@gmail.com', 'Pomaire', 'Felipe');
 INSERT INTO suscripcion (email, localidad, nombre) VALUES ('frichterc+g5@gmail.com', 'Valdivia', 'Felipe');
 INSERT INTO suscripcion (email, localidad, nombre, activo) VALUES ('frichterc+g5@gmail.com', 'Panguipulli', 'El Inactivo', false);
+INSERT INTO localidad (nombre) VALUES ('Quillota');
+INSERT INTO localidad (nombre) VALUES ('San Pedro de Atacama');
+INSERT INTO localidad (nombre) VALUES ('San Antonio de los Cobres');
+INSERT INTO localidad (nombre) VALUES ('Copiapó');
+INSERT INTO localidad (nombre) VALUES ('Visviri');
+INSERT INTO localidad (nombre) VALUES ('Pica');
+INSERT INTO localidad (nombre) VALUES ('Mina Collahuasi');
+INSERT INTO localidad (nombre) VALUES ('Socaire');
+INSERT INTO localidad (nombre) VALUES ('Constitución');
+INSERT INTO localidad (nombre) VALUES ('Calama');
