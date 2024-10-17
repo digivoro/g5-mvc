@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="card badge-primary text-primary-content shadow-xl">
+  <div class="card text-primary-content shadow-xl">
     <div class="card-body">
       <h2 class="card-title">Sismo {{ quakeData.id }}</h2>
       <div class="tooltip text-left" data-tip="Localidad">
@@ -23,3 +23,11 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style>
+
+.card{
+  background-color: #9e92c7;
+}
+
+</style>

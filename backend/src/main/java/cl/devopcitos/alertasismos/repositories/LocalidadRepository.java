@@ -11,4 +11,5 @@ public interface LocalidadRepository extends JpaRepository<Localidad, Long> {
 
     // Método para buscar una localidad por nombre
     Optional<Localidad> findByNombre(String nombre);
+
 }

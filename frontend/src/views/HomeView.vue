@@ -14,11 +14,11 @@ store.getQuakes();
 
     <div v-if="store.recentQuakes" class="grid grid-cols-3 gap-4">
       <QuakeCard
-        v-for="quake in store.recentQuakes"
+        v-for="quake in store.recentQuakes.sort((a, b) => a.id - b.id)"
         :key="quake.id"
         :quakeData="quake"
       />
-    </div>
+</div>
     <div v-else>LOADING</div>
 
     <section class="mt-8">
