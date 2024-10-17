@@ -17,8 +17,17 @@ public class SuscripcionService {
   @Autowired
   private SuscripcionRepository suscripcionRepository;
 
-  //create
-  public Suscripcion createSuscripcion(Suscripcion suscripcion){
+  // Método para crear una suscripción
+  public Suscripcion createSuscripcion(Suscripcion suscripcion) {
+    Optional<Suscripcion> suscripcionExistente = suscripcionRepository.findByEmailAndLocalidadId(
+            suscripcion.getEmail(), suscripcion.getLocalidad().getId());
+
+    // Si ya existe una suscripción con el mismo correo y localidad, lanzar una excepción o devolver null
+    if (suscripcionExistente.isPresent()) {
+      throw new IllegalStateException("Ya existe una suscripción con el mismo correo y localidad.");
+    }
+
+    // Si no existe, crear la nueva suscripción
     return suscripcionRepository.save(suscripcion);
   }
 
@@ -75,5 +84,10 @@ public class SuscripcionService {
       return true;
     }
     return false;
+  }
+
+  // Método para guardar una suscripción
+  public Suscripcion save(Suscripcion suscripcion) {
+    return suscripcionRepository.save(suscripcion);
   }
 }
