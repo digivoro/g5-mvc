@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Alerta Sismos Test Suite">
+    <!-- Pruebas Unitarias -->
+    <test name="Unit Tests">
+        <classes>
+            <class name="cl.devopcitos.alertasismos.controllers.SismoControllerTest"/>
+            <class name="cl.devopcitos.alertasismos.services.SismoServiceTest"/>
+            <class name="cl.devopcitos.alertasismos.models.SismoModelTest"/>
+        </classes>
+    </test>
+    <!-- Pruebas de Integración -->
+    <test name="Integration Tests">
+        <classes>
+            <class name="cl.devopcitos.alertasismos.controllers.SismoControllerIntegrationTest"/>
+            <class name="cl.devopcitos.alertasismos.services.SismoServiceIntegrationTest"/>
+        </classes>
+    </test>
+</suite>
