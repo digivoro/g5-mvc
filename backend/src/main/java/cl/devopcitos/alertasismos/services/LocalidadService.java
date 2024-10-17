@@ -2,6 +2,8 @@ package cl.devopcitos.alertasismos.services;
 
 import cl.devopcitos.alertasismos.models.Localidad;
 import cl.devopcitos.alertasismos.repositories.LocalidadRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,8 @@ public class LocalidadService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(LocalidadService.class);
 
     // Método para buscar localidad por nombre
     public Optional<Localidad> buscarLocalidadPorNombre(String nombre) {
@@ -45,5 +49,19 @@ public class LocalidadService {
     // Método para obtener todas las localidades
     public List<Localidad> obtenerTodasLocalidades() {
         return localidadRepository.findAll();
+    }
+
+    // Método para verificar si existe una localidad o crear una nueva con logs
+    public Localidad verificarOInsertarLocalidad(String nombreLocalidad) {
+        Optional<Localidad> optionalLocalidad = localidadRepository.findByNombre(nombreLocalidad);
+        if (optionalLocalidad.isPresent()) {
+            logger.info("La localidad {} ya existe en la base de datos.", nombreLocalidad);
+            return optionalLocalidad.get();
+        } else {
+            Localidad nuevaLocalidad = new Localidad(nombreLocalidad);
+            nuevaLocalidad = localidadRepository.save(nuevaLocalidad);
+            logger.info("Nueva localidad creada: {}", nuevaLocalidad);
+            return nuevaLocalidad;
+        }
     }
 }
