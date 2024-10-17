@@ -4,6 +4,7 @@ import cl.devopcitos.alertasismos.models.Localidad;
 import cl.devopcitos.alertasismos.models.Suscripcion;
 import cl.devopcitos.alertasismos.repositories.LocalidadRepository;
 import cl.devopcitos.alertasismos.repositories.SuscripcionRepository;
+import cl.devopcitos.alertasismos.services.LocalidadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cl.devopcitos.alertasismos.models.Sismo;
@@ -41,6 +42,9 @@ public class SismoController {
 
     @Autowired
     private LocalidadRepository localidadRepository;
+
+    @Autowired
+    private LocalidadService localidadService;
 
     @GetMapping
     public List<Sismo> getAllSismos(){
@@ -84,11 +88,10 @@ public class SismoController {
         String url = "http://localhost:8080/api/localidades/create-locality";
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
-        // Usar un Set para almacenar las IDs de las localidades de los nuevos sismos, evitando duplicados
         Set<Long> localidadesIds = new HashSet<>();
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            logger.info("Respuesta de create-locality exitosa: {}", response.getBody());
+            logger.info("Respuesta de create-locality exitosa:\n{}", response.getBody());
 
             List<Sismo> sismosAInsertar = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -108,8 +111,6 @@ public class SismoController {
                     if (!sismoService.sismoYaProcesado(nuevoSismo)) {
                         sismosAInsertar.add(nuevoSismo);
                         sismoService.agregarSismoProcesado(nuevoSismo);
-
-                        // Agregar la ID de la localidad al Set, lo que garantiza que no se repitan
                         localidadesIds.add(localidad.get().getId());
                     } else {
                         logger.info("El sismo ya ha sido procesado: {}", nuevoSismo);
@@ -119,19 +120,14 @@ public class SismoController {
                 }
             }
 
-            // Guardar los sismos nuevos que no estaban procesados previamente
             if (!sismosAInsertar.isEmpty()) {
+                logger.info("Sismos insertados:\n{}", formatList(sismosAInsertar));
                 sismoService.saveAll(sismosAInsertar);
-                logger.info("Sismos insertados: {}", sismosAInsertar);
             }
 
-            // Obtener los correos de las suscripciones asociadas a las localidades
             if (!localidadesIds.isEmpty()) {
                 List<Suscripcion> suscripciones = suscripcionRepository.findByLocalidadIdIn(new ArrayList<>(localidadesIds));
-
-                // Crear una lista de mapas (o cualquier estructura que prefieras) para asociar el correo con la localidad
                 List<Map<String, String>> correosYLocalidades = new ArrayList<>();
-
                 suscripciones.forEach(suscripcion -> {
                     Map<String, String> entry = new HashMap<>();
                     entry.put("email", suscripcion.getEmail());
@@ -139,15 +135,31 @@ public class SismoController {
                     correosYLocalidades.add(entry);
                 });
 
-                logger.info("Correos y localidades asociados: {}", correosYLocalidades);
+                logger.info("Correos y localidades asociados:\n{}", formatMapList(correosYLocalidades));
             }
 
             return ResponseEntity.ok("Sismos y localidades procesados correctamente.");
         } else {
-            logger.error("Error en create-locality: {}", response.getBody());
+            logger.error("Error en create-locality:\n{}", response.getBody());
             return ResponseEntity.status(response.getStatusCode()).body("Error al crear localidades: " + response.getBody());
         }
     }
 
+    // Método para formatear listas de sismos para que se vean más legibles en el log
+    private String formatList(List<Sismo> sismos) {
+        StringBuilder formatted = new StringBuilder();
+        for (Sismo sismo : sismos) {
+            formatted.append(sismo).append("\n");
+        }
+        return formatted.toString();
+    }
 
+    // Método para formatear listas de mapas para que se vean más legibles en el log
+    private String formatMapList(List<Map<String, String>> mapList) {
+        StringBuilder formatted = new StringBuilder();
+        for (Map<String, String> map : mapList) {
+            formatted.append(map).append("\n");
+        }
+        return formatted.toString();
+    }
 }
