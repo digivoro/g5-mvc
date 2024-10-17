@@ -4,6 +4,7 @@ import cl.devopcitos.alertasismos.models.Localidad;
 import cl.devopcitos.alertasismos.models.Suscripcion;
 import cl.devopcitos.alertasismos.repositories.LocalidadRepository;
 import cl.devopcitos.alertasismos.repositories.SuscripcionRepository;
+import cl.devopcitos.alertasismos.services.EmailService;
 import cl.devopcitos.alertasismos.services.LocalidadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ public class SismoController {
 
     @Autowired
     private LocalidadService localidadService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     public List<Sismo> getAllSismos(){
@@ -128,12 +132,38 @@ public class SismoController {
             if (!localidadesIds.isEmpty()) {
                 List<Suscripcion> suscripciones = suscripcionRepository.findByLocalidadIdIn(new ArrayList<>(localidadesIds));
                 List<Map<String, String>> correosYLocalidades = new ArrayList<>();
+
+                // Enviar correos
                 suscripciones.forEach(suscripcion -> {
                     Map<String, String> entry = new HashMap<>();
                     entry.put("email", suscripcion.getEmail());
                     entry.put("localidad", suscripcion.getLocalidad().getNombre());
+
                     correosYLocalidades.add(entry);
+
+                    // Construir el cuerpo del correo con los datos del sismo
+                    StringBuilder emailBody = new StringBuilder();
+                    emailBody.append("Estimado suscriptor,\n\n");
+                    emailBody.append("Se ha registrado un nuevo sismo en tu localidad: ").append(suscripcion.getLocalidad().getNombre()).append("\n");
+                    emailBody.append("Detalles del sismo:\n");
+
+                    // Añadir los detalles del sismo
+                    sismosAInsertar.forEach(sismo -> {
+                        if (sismo.getLocalidadId().equals(suscripcion.getLocalidad().getId())) {
+                            emailBody.append("Fecha: ").append(sismo.getFecha()).append("\n");
+                            emailBody.append("Profundidad: ").append(sismo.getProfundidad()).append(" km\n");
+                            emailBody.append("Magnitud: ").append(sismo.getMagnitud()).append("\n");
+                            emailBody.append("Referencia Geográfica: ").append(sismo.getLocalidad()).append("\n\n");
+                        }
+                    });
+
+                    emailBody.append("Gracias por estar atento a las notificaciones.\n\n");
+                    emailBody.append("Saludos,\nEquipo de Alerta Sismos");
+
+                    // Enviar el correo
+                    emailService.sendEmail(suscripcion.getEmail(), "Alerta de nuevo sismo en tu localidad", emailBody.toString());
                 });
+
 
                 logger.info("Correos y localidades asociados:\n{}", formatMapList(correosYLocalidades));
             }
