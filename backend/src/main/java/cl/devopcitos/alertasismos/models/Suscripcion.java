@@ -3,35 +3,45 @@ package cl.devopcitos.alertasismos.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="suscripcion")
+@Table(name = "suscripcion")
 public class Suscripcion {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column
-  private String localidad;
+  // Relación con la tabla Localidad, una suscripción está asociada a una sola localidad
+  @ManyToOne
+  @JoinColumn(name = "localidad_id", referencedColumnName = "id")
+  private Localidad localidad;
+
+  @Column(nullable = false)
   private String email;
+
+  @Column(nullable = false)
   private String nombre;
+
+  @Column
   private Boolean activo;
 
-  public Suscripcion() {}
+  public Suscripcion() {
+  }
 
-  public Suscripcion(String localidad, String email, String nombre, Boolean activo) {
+  public Suscripcion(Localidad localidad, String email, String nombre, Boolean activo) {
     this.localidad = localidad;
     this.email = email;
     this.nombre = nombre;
-    this.activo = true;
+    this.activo = activo;
   }
 
-  public Suscripcion(Long id, String localidad, String email, String nombre, Boolean activo) {
+  public Suscripcion(Long id, Localidad localidad, String email, String nombre, Boolean activo) {
     this.id = id;
     this.localidad = localidad;
     this.email = email;
     this.nombre = nombre;
-    this.activo = true;
+    this.activo = activo;
   }
 
+  // Getters y Setters
   public Long getId() {
     return id;
   }
@@ -39,21 +49,13 @@ public class Suscripcion {
   public void setId(Long id) {
     this.id = id;
   }
-  
-  public String getLocalidad() {
+
+  public Localidad getLocalidad() {
     return localidad;
   }
 
-  public void setLocalidad(String localidad) {
+  public void setLocalidad(Localidad localidad) {
     this.localidad = localidad;
-  }
-  
-  public String getNombre() {
-    return nombre;
-  }
-
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
   }
 
   public String getEmail() {
@@ -62,6 +64,14 @@ public class Suscripcion {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
   }
 
   public Boolean getActivo() {
@@ -75,12 +85,11 @@ public class Suscripcion {
   @Override
   public String toString() {
     return "Suscripcion{" +
-      "id=" + id +
-      ", localidad='" + localidad + '\'' +
-      ", email=" + email +
-      ", nombre=" + nombre +
-      ", activo=" + activo +
-      '}';
+            "id=" + id +
+            ", localidad='" + localidad.getNombre() + '\'' +
+            ", email=" + email +
+            ", nombre=" + nombre +
+            ", activo=" + activo +
+            '}';
   }
-
 }

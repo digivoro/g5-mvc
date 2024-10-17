@@ -5,11 +5,15 @@ import cl.devopcitos.alertasismos.repositories.SismoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SismoService {
+
+    private final List<Sismo> sismosProcesados = new ArrayList<>();
+    private static final int MAX_SISMOS_PROCESADOS = 30;
 
     @Autowired
     private SismoRepository sismoRepository;
@@ -54,6 +58,32 @@ public class SismoService {
     // **Nuevo método** para guardar una lista de sismos
     public List<Sismo> saveAll(List<Sismo> sismos) {
         return sismoRepository.saveAll(sismos);
+    }
+
+    public boolean sismoYaProcesado(Sismo nuevoSismo) {
+        for (Sismo sismoProcesado : sismosProcesados) {
+            if (sismoProcesado.getLocalidadId().equals(nuevoSismo.getLocalidadId()) &&
+                    sismoProcesado.getFecha().equals(nuevoSismo.getFecha()) &&
+                    sismoProcesado.getProfundidad().equals(nuevoSismo.getProfundidad()) &&
+                    sismoProcesado.getMagnitud().equals(nuevoSismo.getMagnitud())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void agregarSismoProcesado(Sismo nuevoSismo) {
+        if (sismosProcesados.size() >= MAX_SISMOS_PROCESADOS) {
+            sismosProcesados.remove(0);
+        }
+        sismosProcesados.add(nuevoSismo);
+    }
+
+    public String extraerLocalidad(String refGeografica) {
+        if (refGeografica != null && refGeografica.contains(" de ")) {
+            return refGeografica.substring(refGeografica.indexOf(" de ") + 4).trim();
+        }
+        return refGeografica;
     }
 
 }

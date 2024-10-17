@@ -1,7 +1,9 @@
 package cl.devopcitos.alertasismos.controllers;
 
 import cl.devopcitos.alertasismos.models.Localidad;
+import cl.devopcitos.alertasismos.models.Suscripcion;
 import cl.devopcitos.alertasismos.repositories.LocalidadRepository;
+import cl.devopcitos.alertasismos.repositories.SuscripcionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cl.devopcitos.alertasismos.models.Sismo;
@@ -16,14 +18,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/sismos")
 public class SismoController {
+
+    @Autowired
+    private SuscripcionRepository suscripcionRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(SismoController.class);
 
@@ -76,13 +78,14 @@ public class SismoController {
         // Preparar los headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // Crear la entidad que contendrá los datos del JSON
         HttpEntity<List<Map<String, Object>>> request = new HttpEntity<>(sismos, headers);
 
-        // Hacer un POST a la API de creación de localidades con el mismo JSON
+        // Hacer un POST a la API de creación de localidades
         String url = "http://localhost:8080/api/localidades/create-locality";
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+        // Usar un Set para almacenar las IDs de las localidades de los nuevos sismos, evitando duplicados
+        Set<Long> localidadesIds = new HashSet<>();
 
         if (response.getStatusCode().is2xxSuccessful()) {
             logger.info("Respuesta de create-locality exitosa: {}", response.getBody());
@@ -92,22 +95,22 @@ public class SismoController {
 
             for (Map<String, Object> sismoData : sismos) {
                 String refGeografica = (String) sismoData.get("RefGeografica");
-
-                // Buscar el id y nombre de la localidad en la base de datos
-                Optional<Localidad> localidad = localidadRepository.findByNombre(extraerLocalidad(refGeografica));
+                Optional<Localidad> localidad = localidadRepository.findByNombre(sismoService.extraerLocalidad(refGeografica));
 
                 if (localidad.isPresent()) {
                     Sismo nuevoSismo = new Sismo();
-                    nuevoSismo.setLocalidadId(localidad.get().getId());  // Guardar el ID de la localidad
-                    nuevoSismo.setLocalidad(localidad.get().getNombre());  // Guardar el nombre de la localidad
+                    nuevoSismo.setLocalidadId(localidad.get().getId());
+                    nuevoSismo.setLocalidad(localidad.get().getNombre());
                     nuevoSismo.setFecha(LocalDateTime.parse((String) sismoData.get("Fecha"), formatter));
                     nuevoSismo.setProfundidad(Double.parseDouble(sismoData.get("Profundidad").toString()));
                     nuevoSismo.setMagnitud(Double.parseDouble(sismoData.get("Magnitud").toString()));
 
-                    // Verificar si el sismo ya fue procesado (comparar ignorando FechaUpdate)
-                    if (!sismoYaProcesado(nuevoSismo)) {
+                    if (!sismoService.sismoYaProcesado(nuevoSismo)) {
                         sismosAInsertar.add(nuevoSismo);
-                        agregarSismoProcesado(nuevoSismo);  // Agregar el nuevo sismo a la lista con límite de 30
+                        sismoService.agregarSismoProcesado(nuevoSismo);
+
+                        // Agregar la ID de la localidad al Set, lo que garantiza que no se repitan
+                        localidadesIds.add(localidad.get().getId());
                     } else {
                         logger.info("El sismo ya ha sido procesado: {}", nuevoSismo);
                     }
@@ -122,6 +125,23 @@ public class SismoController {
                 logger.info("Sismos insertados: {}", sismosAInsertar);
             }
 
+            // Obtener los correos de las suscripciones asociadas a las localidades
+            if (!localidadesIds.isEmpty()) {
+                List<Suscripcion> suscripciones = suscripcionRepository.findByLocalidadIdIn(new ArrayList<>(localidadesIds));
+
+                // Crear una lista de mapas (o cualquier estructura que prefieras) para asociar el correo con la localidad
+                List<Map<String, String>> correosYLocalidades = new ArrayList<>();
+
+                suscripciones.forEach(suscripcion -> {
+                    Map<String, String> entry = new HashMap<>();
+                    entry.put("email", suscripcion.getEmail());
+                    entry.put("localidad", suscripcion.getLocalidad().getNombre());
+                    correosYLocalidades.add(entry);
+                });
+
+                logger.info("Correos y localidades asociados: {}", correosYLocalidades);
+            }
+
             return ResponseEntity.ok("Sismos y localidades procesados correctamente.");
         } else {
             logger.error("Error en create-locality: {}", response.getBody());
@@ -129,40 +149,5 @@ public class SismoController {
         }
     }
 
-    // Método para verificar si un sismo ya fue procesado, ignorando el campo FechaUpdate
-    private boolean sismoYaProcesado(Sismo nuevoSismo) {
-        for (Sismo sismoProcesado : sismosProcesados) {
-            // Comparar todos los campos excepto 'FechaUpdate'
-            if (sismoProcesado.getLocalidadId().equals(nuevoSismo.getLocalidadId()) &&
-                    sismoProcesado.getFecha().equals(nuevoSismo.getFecha()) &&
-                    sismoProcesado.getProfundidad().equals(nuevoSismo.getProfundidad()) &&
-                    sismoProcesado.getMagnitud().equals(nuevoSismo.getMagnitud())) {
-                return true; // Ya existe un sismo igual
-            }
-        }
-        return false; // No se encontró ningún sismo igual
-    }
-
-    // Método para agregar un sismo a la lista de procesados, con límite de 30
-    private void agregarSismoProcesado(Sismo nuevoSismo) {
-        if (sismosProcesados.size() >= MAX_SISMOS_PROCESADOS) {
-            // Remover el sismo más antiguo (el primero de la lista) si ya hay 30
-            sismosProcesados.remove(0);
-        }
-        // Agregar el nuevo sismo
-        sismosProcesados.add(nuevoSismo);
-        logger.info("Sismo añadido a la lista de procesados: {}", nuevoSismo);
-    }
-
-    // Método auxiliar para extraer la localidad después de " de "
-    private String extraerLocalidad(String refGeografica) {
-        // Verificar si contiene la cadena " de "
-        if (refGeografica != null && refGeografica.contains(" de ")) {
-            // Extraer todo lo que está después de la PRIMERA aparición de " de "
-            return refGeografica.substring(refGeografica.indexOf(" de ") + 4).trim();
-        }
-        // Si no contiene " de ", devolver la cadena completa
-        return refGeografica;
-    }
 
 }

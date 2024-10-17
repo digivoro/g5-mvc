@@ -12,6 +12,6 @@ INSERT INTO sismo (localidad, localidad_id, fecha, profundidad, magnitud) VALUES
 INSERT INTO sismo (localidad, localidad_id, fecha, profundidad, magnitud) VALUES ('Copiapó', 4, '2024-10-09', 45, 3.7);
 INSERT INTO sismo (localidad, localidad_id, fecha, profundidad, magnitud) VALUES ('Pica', 6, '2024-10-04', 20, 6.6);
 INSERT INTO sismo (localidad, localidad_id, fecha, profundidad, magnitud) VALUES ('Calama', 10, '2024-08-25', 100, 9.1);
-INSERT INTO suscripcion (email, localidad, nombre) VALUES ('frichterc+g5@gmail.com', 'Pomaire', 'Felipe');
-INSERT INTO suscripcion (email, localidad, nombre) VALUES ('frichterc+g5@gmail.com', 'Valdivia', 'Felipe');
-INSERT INTO suscripcion (email, localidad, nombre, activo) VALUES ('frichterc+g5@gmail.com', 'Panguipulli', 'El Inactivo', false);
+INSERT INTO suscripcion (email, localidad_id, nombre) VALUES ('frichterc+g5@gmail.com', 1, 'Felipe');
+INSERT INTO suscripcion (email, localidad_id, nombre) VALUES ('frichterc+g5@gmail.com', 2, 'Felipe');
+INSERT INTO suscripcion (email, localidad_id, nombre, activo) VALUES ('frichterc+g5@gmail.com', 3, 'El Inactivo', false);

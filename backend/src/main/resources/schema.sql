@@ -17,9 +17,10 @@ CREATE TABLE sismo (
 );
 
 CREATE TABLE suscripcion (
-id INT AUTO_INCREMENT PRIMARY KEY,
-email varchar(255) NOT NULL,
-localidad varchar(255) NOT NULL,
-nombre varchar(255) NOT NULL,
-activo BOOLEAN DEFAULT 1
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email varchar(255) NOT NULL,
+    localidad_id INT,
+    nombre varchar(255) NOT NULL,
+    activo BOOLEAN DEFAULT 1,
+    FOREIGN KEY (localidad_id) REFERENCES localidad(id)
 );
