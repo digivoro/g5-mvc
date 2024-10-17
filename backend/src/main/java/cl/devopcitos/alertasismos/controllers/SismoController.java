@@ -1,7 +1,9 @@
 package cl.devopcitos.alertasismos.controllers;
 
 import cl.devopcitos.alertasismos.models.Localidad;
+import cl.devopcitos.alertasismos.models.Suscripcion;
 import cl.devopcitos.alertasismos.repositories.LocalidadRepository;
+import cl.devopcitos.alertasismos.repositories.SuscripcionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cl.devopcitos.alertasismos.models.Sismo;
@@ -21,6 +23,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/sismos")
 public class SismoController {
+
+    @Autowired
+    private SuscripcionRepository suscripcionRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(SismoController.class);
 
@@ -100,7 +105,6 @@ public class SismoController {
                     nuevoSismo.setProfundidad(Double.parseDouble(sismoData.get("Profundidad").toString()));
                     nuevoSismo.setMagnitud(Double.parseDouble(sismoData.get("Magnitud").toString()));
 
-                    // Verificar si el sismo ya fue procesado (comparar ignorando FechaUpdate)
                     if (!sismoService.sismoYaProcesado(nuevoSismo)) {
                         sismosAInsertar.add(nuevoSismo);
                         sismoService.agregarSismoProcesado(nuevoSismo);
@@ -121,8 +125,22 @@ public class SismoController {
                 logger.info("Sismos insertados: {}", sismosAInsertar);
             }
 
-            // Aquí puedes utilizar el Set `localidadesIds` con las IDs de las localidades de los sismos nuevos
-            logger.info("IDs de las localidades (sin duplicados) de los sismos registrados: {}", localidadesIds);
+            // Obtener los correos de las suscripciones asociadas a las localidades
+            if (!localidadesIds.isEmpty()) {
+                List<Suscripcion> suscripciones = suscripcionRepository.findByLocalidadIdIn(new ArrayList<>(localidadesIds));
+
+                // Crear una lista de mapas (o cualquier estructura que prefieras) para asociar el correo con la localidad
+                List<Map<String, String>> correosYLocalidades = new ArrayList<>();
+
+                suscripciones.forEach(suscripcion -> {
+                    Map<String, String> entry = new HashMap<>();
+                    entry.put("email", suscripcion.getEmail());
+                    entry.put("localidad", suscripcion.getLocalidad().getNombre());
+                    correosYLocalidades.add(entry);
+                });
+
+                logger.info("Correos y localidades asociados: {}", correosYLocalidades);
+            }
 
             return ResponseEntity.ok("Sismos y localidades procesados correctamente.");
         } else {
@@ -130,7 +148,6 @@ public class SismoController {
             return ResponseEntity.status(response.getStatusCode()).body("Error al crear localidades: " + response.getBody());
         }
     }
-
 
 
 }
